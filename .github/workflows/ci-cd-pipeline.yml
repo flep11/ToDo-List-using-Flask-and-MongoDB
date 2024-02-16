@@ -48,12 +48,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-    - name: Set up DAST tools
-      run: |
-        # Tutaj możesz skonfigurować narzędzia do DAST, np. OWASP ZAP
-        # To może wymagać uruchomienia serwera aplikacji i skonfigurowania skanowania DAST.
-        echo "DAST configuration placeholder"
-    - name: Run DAST (Dynamic Application Security Testing)
-      run: |
-        # Komenda do uruchomienia DAST
-        echo "DAST run placeholder"
+    - name: ZAP Scan
+      uses: zaproxy/action-baseline@v0.4.0
+      with:
+        target: 'http://localhost:8000'
+        cmd_options: '-a -J reports/zapreport.json'
