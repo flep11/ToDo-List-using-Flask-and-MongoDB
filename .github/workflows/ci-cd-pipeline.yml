@@ -1,0 +1,59 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  sast:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.8'
+    - name: Install dependencies for SAST
+      run: |
+        pip install bandit
+    - name: Run SAST (Static Application Security Testing)
+      run: |
+        bandit -r .
+
+  build:
+    needs: sast
+    runs-on: ubuntu-latest
+    services:
+      mongodb:
+        image: mongo
+        ports:
+          - 27017:27017
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.8'
+    - name: Install project dependencies
+      run: |
+        pip install -r requirements.txt
+    - name: Run tests
+      run: |
+        pytest
+
+  dast:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up DAST tools
+      run: |
+        # Tutaj możesz skonfigurować narzędzia do DAST, np. OWASP ZAP
+        # To może wymagać uruchomienia serwera aplikacji i skonfigurowania skanowania DAST.
+        echo "DAST configuration placeholder"
+    - name: Run DAST (Dynamic Application Security Testing)
+      run: |
+        # Komenda do uruchomienia DAST
+        echo "DAST run placeholder"

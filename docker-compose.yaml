@@ -4,7 +4,7 @@ services:
   todo-flaskapp:
     image: coolboi567/todo-flaskapp:${DOCKER_TAG:-latest}
     ports:
-      - 5000:5000
+      - 8000:5000
     container_name: flask-app
     environment:
       - FLASK_ENV=development
